@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Giphy API</title>
+</head>
+
+<body>
+<!-- Movie Buttons -->
+  <button data-movie="E.T">E.T.</button>
+  <button data-movie="Red Dawn">Red Dawn</button>
+  <button data-movie="Star Wars">Star Wars</button>
+  <button data-movie="The Outsiders">The Outsiders</button>
+  <button data-movie="The Goonies">The Goonies</button>
+  <button data-movie="Back to the Future">Back to the Future</button>
+  <button data-movie="Ghostbusters">Ghostbusters</button>
+  <button data-movie="Die Hard">Die Hard</button>
+
+<!-- GIF Container -->
+<div id="gif-container"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+
+    $("button").on("click", function() {
+      var movie = $(this).attr("data-movie");
+      console.log(this);
+
+    var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + movie + "&api_key=dc6zaTOxFJmzC&limit=10rating=PG-13";
+
+    $.ajax({
+      url: queryURL,
+      method: 'GET'
+    }).done(function(response) {
+      console.log(response);
+      var results = response.data;
+      for (var i = 0; i < results.length; i++) {
+            if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
+              var gif = $("<div class='gif'>");
+              var rating = results[i].rating;
+              var p = $("<p>").text("Rating: " + rating);
+              var movieGIF = $("<img>");
+              movieGIF.attr("src", results[i].images.fixed_height.url);
+              gif.append(p);
+              gif.append(movieGIF);
+              $("#gif-container").prepend(gif);
+
+            }
+          }
+        });
+    });
+  </script>
+
+</body>
+
+</html>
